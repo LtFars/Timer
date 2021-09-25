@@ -22,6 +22,10 @@ class ViewController: UIViewController {
         return button
     }()
     
+    private lazy var isStarted = false
+    private lazy var isWorkTime = false
+    private lazy var timer = Timer()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
