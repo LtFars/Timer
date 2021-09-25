@@ -60,6 +60,18 @@ class ViewController: UIViewController {
     }
     
     // MARK: - Actions
+    
+    @objc private func buttonAction() {
+        if isStarted {
+            isStarted = false
+            button.setImage(UIImage(systemName: "play"), for: .normal)
+            timer.invalidate()
+        } else {
+            isStarted = true
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerUpdate), userInfo: nil, repeats: true)
+            button.setImage(UIImage(systemName: "pause"), for: .normal)
+        }
+    }
 
 
 }
