@@ -1,10 +1,3 @@
-//
-//  ViewController.swift
-//  Timer
-//
-//  Created by Denis Snezhko on 25.09.2021.
-//
-
 import UIKit
 
 class ViewController: UIViewController {
@@ -72,7 +65,47 @@ class ViewController: UIViewController {
             button.setImage(UIImage(systemName: "pause"), for: .normal)
         }
     }
-
+    
+    // Timer body
+    @objc private func timerUpdate() {
+        let time = label.text?.split(separator: ":")
+        var minutes = Int(time?[0] ?? "") ?? 0
+        var seconds = Int(time?[1] ?? "") ?? 0
+        if seconds > 0 {
+            seconds -= 1
+        } else {
+            if minutes > 0 {
+                minutes -= 1
+                seconds = 59
+            } else {
+                changeMode()
+                return
+            }
+        }
+        var stringMinutes = String(minutes)
+        var stringSeconds = String(seconds)
+        if minutes < 10 { stringMinutes = "0" + String(minutes) }
+        if seconds < 10 { stringSeconds = "0" + String(seconds) }
+        label.text = stringMinutes + ":" + stringSeconds
+    }
+    
+    // Change mode of timer ( working/rest)
+    private func changeMode() {
+        isStarted = false
+        isWorkTime ? (isWorkTime = false) : (isWorkTime = true)
+        timer.invalidate()
+        if isWorkTime == true {
+            label.textColor = .green
+            button.tintColor = .green
+            button.setImage(UIImage(systemName: "play"), for: .normal)
+            label.text = "05:00"
+        } else {
+            label.textColor = .orange
+            button.tintColor = .orange
+            button.setImage(UIImage(systemName: "play"), for: .normal)
+            label.text = "25:00"
+        }
+    }
 
 }
 
