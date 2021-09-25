@@ -14,16 +14,17 @@ class ViewController: UIViewController {
         var button = UIButton(type: UIButton.ButtonType.custom)
         button.setImage(UIImage(systemName: "play"), for: .normal)
         button.tintColor = .orange
-        button.frame = CGRect(x: 120,y: 120,width: 120,height: 120)
-        button.frame.size = CGSize(width: 120,height: 120)
-        button.imageEdgeInsets = UIEdgeInsets(top: 35, left: 35, bottom: 35, right: 35)
-        button.contentEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 40, right: 40);
+        button.backgroundColor = .white
+        button.imageView?.contentMode = .scaleAspectFit
+        button.frame = CGRect(x: 30,y: 30,width: 30,height: 30)
+        button.imageEdgeInsets = UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50)
+        button.contentEdgeInsets = UIEdgeInsets(top: 25, left: 25, bottom: 25, right: 25)
         button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
         return button
     }()
     
     private lazy var isStarted = false
-    private lazy var isWorkTime = false
+    private lazy var isWorkTime = true
     private lazy var timer = Timer()
     
     // MARK: - Lifecycle
@@ -65,6 +66,7 @@ class ViewController: UIViewController {
             timer.invalidate()
         } else {
             isStarted = true
+            timer.invalidate()
             timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerUpdate), userInfo: nil, repeats: true)
             button.setImage(UIImage(systemName: "pause"), for: .normal)
         }
@@ -88,28 +90,24 @@ class ViewController: UIViewController {
         }
         var stringMinutes = String(minutes)
         var stringSeconds = String(seconds)
-        if minutes < 10 { stringMinutes = "0" + String(minutes) }
-        if seconds < 10 { stringSeconds = "0" + String(seconds) }
+        if minutes < 10 { stringMinutes = "0" + stringMinutes }
+        if seconds < 10 { stringSeconds = "0" + stringSeconds }
         label.text = stringMinutes + ":" + stringSeconds
     }
     
     // Change mode of timer ( working/rest)
     private func changeMode() {
-        isStarted = false
-        isWorkTime ? (isWorkTime = false) : (isWorkTime = true)
-        timer.invalidate()
-        if isWorkTime == true {
+        if isWorkTime {
+            isWorkTime = false
             label.textColor = .green
             button.tintColor = .green
-            button.setImage(UIImage(systemName: "play"), for: .normal)
             label.text = "05:00"
         } else {
+            isWorkTime = true
             label.textColor = .orange
             button.tintColor = .orange
-            button.setImage(UIImage(systemName: "play"), for: .normal)
             label.text = "25:00"
         }
     }
-
 }
 
