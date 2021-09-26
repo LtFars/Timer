@@ -12,7 +12,7 @@ class ViewController: UIViewController {
     
     private lazy var button: UIButton = {
         var button = UIButton(type: UIButton.ButtonType.custom)
-        button.setImage(UIImage(systemName: "play"), for: .normal)
+        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
         button.tintColor = .orange
         button.backgroundColor = nil
         button.imageView?.contentMode = .scaleAspectFit
@@ -31,7 +31,6 @@ class ViewController: UIViewController {
     private lazy var shapeLayerAnimation = CABasicAnimation(keyPath: "strokeEnd")
     private lazy var shapeLayer = CAShapeLayer()
     private lazy var trackLayer = CAShapeLayer()
-    
     private lazy var ms = 0
     
     // MARK: - Lifecycle
@@ -42,7 +41,6 @@ class ViewController: UIViewController {
         setupView()
         setupHierarchy()
         setupLayout()
-        
     }
     
     // MARK: - Settings
@@ -73,7 +71,7 @@ class ViewController: UIViewController {
     @objc private func buttonAction() {
         if isStarted {
             isStarted = false
-            button.setImage(UIImage(systemName: "play"), for: .normal)
+            button.setImage(UIImage(systemName: "play.fill"), for: .normal)
             timer.invalidate()
             pauseAnimation(layer: shapeLayer)
         } else {
@@ -116,30 +114,29 @@ class ViewController: UIViewController {
     }
     
     private func changeMode() {
+        var color: CGColor
         if isWorkTime {
             isWorkTime = false
             label.textColor = .green
             button.tintColor = .green
             label.text = "05:01"
-            createTrackLayer(color: UIColor.systemPink.cgColor)
-            let time = label.text?.split(separator: ":")
-            let minutes = Int(time?[0] ?? "") ?? 0
-            let seconds = Int(time?[1] ?? "") ?? 0
-            createAnimation(color: UIColor.green.cgColor, time: (minutes * 60 + seconds - 1))      
+            color = UIColor.green.cgColor
         } else {
             isWorkTime = true
             label.textColor = .orange
             button.tintColor = .orange
             label.text = "25:01"
-            createTrackLayer(color: UIColor.systemPink.cgColor)
-            let time = label.text?.split(separator: ":")
-            let minutes = Int(time?[0] ?? "") ?? 0
-            let seconds = Int(time?[1] ?? "") ?? 0
-            createAnimation(color: UIColor.orange.cgColor, time: (minutes * 60 + seconds - 1))
+            color = UIColor.orange.cgColor
         }
+        createTrackLayer(color: UIColor.systemPink.cgColor)
+        let time = label.text?.split(separator: ":")
+        let minutes = Int(time?[0] ?? "") ?? 0
+        let seconds = Int(time?[1] ?? "") ?? 0
+        createAnimation(color: color, time: (minutes * 60 + seconds - 1))
     }
     
     // MARK: - Animations
+    
     private func createAnimation(color: CGColor, time: Int) {
         var center = newView.center
         center.x -= 50
