@@ -120,23 +120,22 @@ class ViewController: UIViewController {
             isWorkTime = false
             label.textColor = .green
             button.tintColor = .green
-            label.text = "05:00"
+            label.text = "05:01"
             createTrackLayer(color: UIColor.systemPink.cgColor)
             let time = label.text?.split(separator: ":")
             let minutes = Int(time?[0] ?? "") ?? 0
             let seconds = Int(time?[1] ?? "") ?? 0
-            createAnimation(color: UIColor.green.cgColor, time: (minutes * 60 + seconds))
-            
+            createAnimation(color: UIColor.green.cgColor, time: (minutes * 60 + seconds - 1)      
         } else {
             isWorkTime = true
             label.textColor = .orange
             button.tintColor = .orange
-            label.text = "25:00"
+            label.text = "25:01"
             createTrackLayer(color: UIColor.systemPink.cgColor)
             let time = label.text?.split(separator: ":")
             let minutes = Int(time?[0] ?? "") ?? 0
             let seconds = Int(time?[1] ?? "") ?? 0
-            createAnimation(color: UIColor.orange.cgColor, time: (minutes * 60 + seconds))
+            createAnimation(color: UIColor.orange.cgColor, time: (minutes * 60 + seconds - 1))
         }
     }
     
