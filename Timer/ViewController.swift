@@ -125,8 +125,7 @@ class ViewController: UIViewController {
             let time = label.text?.split(separator: ":")
             let minutes = Int(time?[0] ?? "") ?? 0
             let seconds = Int(time?[1] ?? "") ?? 0
-            createAnimation(color: UIColor.green.cgColor, time: (minutes * 60 + seconds - 1))
-            
+            createAnimation(color: UIColor.green.cgColor, time: (minutes * 60 + seconds - 1)      
         } else {
             isWorkTime = true
             label.textColor = .orange
