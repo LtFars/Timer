@@ -1,12 +1,15 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    private let workTime = "00:10"
+    private let restTime = "00:05"
    
     private lazy var label: UILabel = {
         var label = UILabel()
         label.font = .systemFont(ofSize: 50)
         label.textColor = .orange
-        label.text = "25:00"
+        label.text = workTime
         return label
     }()
     
@@ -66,19 +69,26 @@ class ViewController: UIViewController {
         createTrackLayer(color: UIColor.systemPink.cgColor)
     }
     
+    private func changeButtonState() {
+        if isStarted {
+            button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        } else {
+            button.setImage(UIImage(systemName: "pause"), for: .normal)
+        }
+    }
+    
     // MARK: - Actions
     
     @objc private func buttonAction() {
+        changeButtonState()
         if isStarted {
             isStarted = false
-            button.setImage(UIImage(systemName: "play.fill"), for: .normal)
             timer.invalidate()
             pauseAnimation(layer: shapeLayer)
         } else {
             isStarted = true
             timer.invalidate()
             timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(timerUpdate), userInfo: nil, repeats: true)
-            button.setImage(UIImage(systemName: "pause"), for: .normal)
             resumeAnimation(layer: shapeLayer)
         }
     }
@@ -119,13 +129,13 @@ class ViewController: UIViewController {
             isWorkTime = false
             label.textColor = .green
             button.tintColor = .green
-            label.text = "05:01"
+            label.text = restTime
             color = UIColor.green.cgColor
         } else {
             isWorkTime = true
             label.textColor = .orange
             button.tintColor = .orange
-            label.text = "25:01"
+            label.text = workTime
             color = UIColor.orange.cgColor
         }
         createTrackLayer(color: UIColor.systemPink.cgColor)
@@ -133,6 +143,10 @@ class ViewController: UIViewController {
         let minutes = Int(time?[0] ?? "") ?? 0
         let seconds = Int(time?[1] ?? "") ?? 0
         createAnimation(color: color, time: (minutes * 60 + seconds - 1))
+        timer.invalidate()
+        pauseAnimation(layer: shapeLayer)
+        changeButtonState()
+        isStarted = false
     }
     
     // MARK: - Animations
@@ -141,9 +155,14 @@ class ViewController: UIViewController {
         var center = newView.center
         center.x -= 50
         center.y -= 40
-        let startAngle: CGFloat = -0.25 * 2 * .pi
+        let startAngle: CGFloat = -0.5 * .pi
         let endAngle: CGFloat = startAngle + 2 * .pi
-        let circularPath = UIBezierPath(arcCenter: center, radius: 130, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+        let circularPath = UIBezierPath(arcCenter: center,
+                                        radius: 130,
+                                        startAngle: startAngle,
+                                        endAngle: endAngle,
+                                        clockwise: true
+                                        )
         shapeLayer.strokeColor = color
         shapeLayer.lineWidth = 5
         shapeLayer.fillColor = UIColor.clear.cgColor
@@ -178,7 +197,12 @@ class ViewController: UIViewController {
         var center = newView.center
         center.x -= 50
         center.y -= 40
-        let circularPath = UIBezierPath(arcCenter: center, radius: 130, startAngle: -CGFloat.pi / 2, endAngle: 2 * CGFloat.pi, clockwise: true)
+        let circularPath = UIBezierPath(arcCenter: center,
+                                        radius: 130,
+                                        startAngle: -CGFloat.pi / 2,
+                                        endAngle: 2 * CGFloat.pi,
+                                        clockwise: true
+                                        )
         trackLayer.strokeColor = color
         trackLayer.lineWidth = 5
         trackLayer.fillColor = UIColor.clear.cgColor
